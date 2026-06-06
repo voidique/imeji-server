@@ -1,9 +1,11 @@
-import { Hono } from 'hono'
+import { createApp } from '@/app'
+import { env } from '@/config/env'
 
-const app = new Hono()
+const app = createApp()
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+console.log(`🚀 imeji-server listening on http://localhost:${env.PORT}`)
 
-export default app
+export default {
+  port: env.PORT,
+  fetch: app.fetch,
+}
