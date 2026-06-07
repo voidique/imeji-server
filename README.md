@@ -113,6 +113,22 @@ drizzle.config.ts
 > - 프록시(로드밸런서) 뒤에 둘 경우 `X-Forwarded-For` 를 신뢰하므로, 프록시가 해당 헤더를 검증·설정하는지 확인.
 > - HSTS 는 HTTPS 환경에서만 의미가 있음.
 
+## 인증 (Bearer)
+
+better-auth `bearer()` 플러그인 사용. 쿠키 없이 **`Authorization: Bearer <token>`** 헤더로 인증 가능.
+
+```bash
+# 로그인 → 응답 헤더 set-auth-token 에서 토큰 획득
+curl -i -X POST $API/api/auth/sign-in/email \
+  -H 'content-type: application/json' \
+  -d '{"email":"a@b.com","password":"password1234"}'
+
+# 이후 보호된 API 호출
+curl $API/api/mindmaps -H "Authorization: Bearer <token>"
+```
+
+모든 `/api/mindmaps/*` 는 인증 필수이며, 리소스는 **소유자(userId) 로 스코프**됩니다. 남의 맵 접근 시 존재를 숨기기 위해 `404` 를 반환합니다.
+
 ## API
 
 | 메서드 | 경로 | 설명 |
@@ -120,4 +136,16 @@ drizzle.config.ts
 | GET | `/` | 헬스체크 |
 | GET | `/me` | 현재 세션/유저 |
 | ALL | `/api/auth/*` | better-auth (가입/로그인/세션 등) |
-| POST | `/api/chat` | 인증 필요. AI 스트리밍 채팅 (useChat 호환) |
+| POST | `/api/chat` | 🔒 AI 스트리밍 채팅 (useChat 호환) |
+| GET | `/api/mindmaps` | 🔒 내 맵 목록 (`?limit&offset`, 개념 수 포함) |
+| POST | `/api/mindmaps` | 🔒 맵 생성 `{ title }` |
+| GET | `/api/mindmaps/:id` | 🔒 맵 상세 + concept **트리** |
+| PATCH | `/api/mindmaps/:id` | 🔒 맵 수정 `{ title }` |
+| DELETE | `/api/mindmaps/:id` | 🔒 맵 삭제 (concept cascade) |
+| GET | `/api/mindmaps/:id/markdown` | 🔒 markmap 용 마크다운 (text/markdown) |
+| GET | `/api/mindmaps/:id/graph` | 🔒 force-graph 용 `{ nodes, links }` |
+| POST | `/api/mindmaps/:id/concepts` | 🔒 개념 추가 `{ label, detail?, parentId?, mastery?, position? }` |
+| PATCH | `/api/mindmaps/:id/concepts/:cid` | 🔒 개념 수정 (부분, 사이클 방지) |
+| DELETE | `/api/mindmaps/:id/concepts/:cid` | 🔒 개념 삭제 (자식 cascade) |
+
+> 🔒 = 인증 필요. 상태변경 요청은 `application/json` 으로 보내야 함 (CSRF 보호: form 계열 content-type 은 Origin 검증).
