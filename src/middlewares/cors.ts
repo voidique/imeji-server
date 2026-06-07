@@ -6,6 +6,6 @@ export const corsMiddleware = cors({
   credentials: true,
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  exposeHeaders: ['Content-Length'],
+  exposeHeaders: ['Content-Length', 'x-mindmap-id'],
   maxAge: 600,
 })

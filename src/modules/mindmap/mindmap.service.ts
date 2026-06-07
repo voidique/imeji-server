@@ -3,6 +3,7 @@ import { db } from '@/db/client'
 import { type Concept, concept, mindmap } from '@/db/schema'
 import { httpError } from '@/lib/errors'
 import type { CreateConceptInput, UpdateConceptInput } from './mindmap.schema'
+import { buildTree, toMarkdown } from './mindmap.transform'
 
 async function getOwnedMap(userId: string, mapId: string) {
   const [row] = await db
@@ -58,6 +59,11 @@ export async function getMindmapWithConcepts(userId: string, mapId: string) {
   })
   if (!map) throw httpError(404, 'Mindmap not found')
   return map
+}
+
+export async function getMindmapMarkdown(userId: string, mapId: string) {
+  const map = await getMindmapWithConcepts(userId, mapId)
+  return { title: map.title, markdown: toMarkdown(map.title, buildTree(map.concepts)) }
 }
 
 export async function updateMindmap(userId: string, mapId: string, title: string) {

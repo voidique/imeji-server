@@ -1,4 +1,5 @@
-import type { Concept } from '@/db/schema'
+import type { Concept, NewConcept } from '@/db/schema'
+import type { GeneratedConcept } from './mindmap.generate.schema'
 
 export type ConceptNode = Concept & { children: ConceptNode[] }
 
@@ -42,4 +43,29 @@ export function toGraph(concepts: Concept[]) {
       .filter((c) => c.parentId)
       .map((c) => ({ source: c.parentId as string, target: c.id })),
   }
+}
+
+export function serializeConcepts(concepts: Concept[]): string {
+  if (!concepts.length) return '(the map has no concepts yet)'
+  return concepts
+    .map(
+      (c) =>
+        `- id=${c.id} | label=${JSON.stringify(c.label)} | parent=${c.parentId ?? 'root'} | mastery=${c.mastery}`,
+    )
+    .join('\n')
+}
+
+export function flattenGeneratedTree(mapId: string, nodes: GeneratedConcept[]): NewConcept[] {
+  const rows: NewConcept[] = []
+  const walk = (list: GeneratedConcept[], parentId: string | null) => {
+    list.forEach((node, index) => {
+      const id = crypto.randomUUID()
+      const label = (node.label ?? '').trim().slice(0, 500) || 'Untitled'
+      const detail = node.detail?.trim() ? node.detail.trim().slice(0, 5000) : null
+      rows.push({ id, mapId, parentId, label, detail, position: index })
+      if (node.children && node.children.length) walk(node.children, id)
+    })
+  }
+  walk(nodes, null)
+  return rows
 }

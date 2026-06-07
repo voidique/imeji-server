@@ -11,6 +11,7 @@ const EnvSchema = z.object({
     .default('http://localhost:3000')
     .transform((s) => s.split(',').map((v) => v.trim())),
   OPENAI_API_KEY: z.string().optional(),
+  OPENAI_MODEL: z.string().default('gpt-5.4-mini'),
 
   RATE_LIMIT_WINDOW_MS: z.coerce.number().default(60_000),
   RATE_LIMIT_MAX: z.coerce.number().default(100),

@@ -2,6 +2,11 @@ import { zValidator } from '@hono/zod-validator'
 import { Hono } from 'hono'
 import { requireAuth } from '@/middlewares'
 import type { AppBindings } from '@/types'
+import { assistMindmap } from './mindmap.assist.service'
+import { generateMindmap } from './mindmap.generate.service'
+import { generateRequestSchema } from './mindmap.generate.schema'
+import { applyOps } from './mindmap.ops.service'
+import { assistRequestSchema, opsRequestSchema } from './mindmap.ops.schema'
 import {
   conceptIdParam,
   createConceptBody,
@@ -37,6 +42,37 @@ export const mindmapRoutes = new Hono<AppBindings>()
     const map = await createMindmap(user.id, c.req.valid('json').title)
     return c.json(map, 201)
   })
+
+  .post('/generate', zValidator('json', generateRequestSchema), (c) => {
+    const user = c.get('user')!
+    const mapId = crypto.randomUUID()
+    const result = generateMindmap(user.id, mapId, c.req.valid('json'))
+    return result.toTextStreamResponse({ headers: { 'x-mindmap-id': mapId } })
+  })
+
+  .post(
+    '/:mapId/assist',
+    zValidator('param', mapIdParam),
+    zValidator('json', assistRequestSchema),
+    async (c) => {
+      const user = c.get('user')!
+      const { mapId } = c.req.valid('param')
+      const result = await assistMindmap(user.id, mapId, c.req.valid('json'))
+      return result.toTextStreamResponse()
+    },
+  )
+
+  .post(
+    '/:mapId/ops',
+    zValidator('param', mapIdParam),
+    zValidator('json', opsRequestSchema),
+    async (c) => {
+      const user = c.get('user')!
+      const { mapId } = c.req.valid('param')
+      const result = await applyOps(user.id, mapId, c.req.valid('json').ops)
+      return c.json(result)
+    },
+  )
 
   .get('/:mapId', zValidator('param', mapIdParam), async (c) => {
     const user = c.get('user')!
