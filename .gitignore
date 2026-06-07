@@ -9,3 +9,7 @@ node_modules/
 # build / logs
 dist/
 *.log
+
+# llm context
+LLM-docs.md
+CLAUDE.md
