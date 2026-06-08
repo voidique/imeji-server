@@ -1,4 +1,4 @@
-import type { Session, User } from '@/lib/auth'
+import type { Session, User } from './lib/auth'
 
 export type AppBindings = {
   Variables: {

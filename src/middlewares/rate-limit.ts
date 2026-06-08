@@ -1,12 +1,17 @@
 import type { Context } from 'hono'
-import { getConnInfo } from 'hono/bun'
+import { getConnInfo } from '@hono/node-server/conninfo'
 import { rateLimiter } from 'hono-rate-limiter'
-import { env } from '@/config/env'
-import type { AppBindings } from '@/types'
+import { env } from '../config/env'
+import type { AppBindings } from '../types'
 
 const clientKey = (c: Context<AppBindings>) => {
   const forwarded = c.req.header('x-forwarded-for')?.split(',')[0]?.trim()
-  return forwarded || getConnInfo(c).remote.address || 'unknown'
+  if (forwarded) return forwarded
+  try {
+    return getConnInfo(c).remote.address ?? 'unknown'
+  } catch {
+    return 'unknown'
+  }
 }
 
 export const rateLimit = rateLimiter<AppBindings>({

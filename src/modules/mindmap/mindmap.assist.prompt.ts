@@ -1,4 +1,4 @@
-import type { Concept } from '@/db/schema'
+import type { Concept } from '../../db/schema'
 import type { AssistInput } from './mindmap.ops.schema'
 import { serializeConcepts } from './mindmap.transform'
 

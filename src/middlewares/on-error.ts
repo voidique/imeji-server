@@ -1,7 +1,7 @@
 import type { ErrorHandler } from 'hono'
 import { HTTPException } from 'hono/http-exception'
-import { isProd } from '@/config/env'
-import type { AppBindings } from '@/types'
+import { isProd } from '../config/env'
+import type { AppBindings } from '../types'
 
 export const onError: ErrorHandler<AppBindings> = (err, c) => {
   if (err instanceof HTTPException) {

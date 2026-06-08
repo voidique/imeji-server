@@ -1,4 +1,4 @@
-import type { Concept, NewConcept } from '@/db/schema'
+import type { Concept, NewConcept } from '../../db/schema'
 import type { GeneratedConcept } from './mindmap.generate.schema'
 
 export type ConceptNode = Concept & { children: ConceptNode[] }

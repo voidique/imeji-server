@@ -20,7 +20,7 @@ const EnvSchema = z.object({
   REQUEST_TIMEOUT_MS: z.coerce.number().default(15_000),
 })
 
-export const env = EnvSchema.parse(Bun.env)
+export const env = EnvSchema.parse(process.env)
 export type Env = z.infer<typeof EnvSchema>
 
 export const isProd = env.NODE_ENV === 'production'

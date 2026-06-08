@@ -1,5 +1,5 @@
 import { createMiddleware } from 'hono/factory'
-import type { AppBindings } from '@/types'
+import type { AppBindings } from '../types'
 
 export const requireAuth = createMiddleware<AppBindings>(async (c, next) => {
   if (!c.get('user')) {

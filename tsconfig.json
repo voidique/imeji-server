@@ -1,32 +1,23 @@
 {
   "compilerOptions": {
-    // Bun 권장 설정
     "lib": ["ESNext"],
     "target": "ESNext",
-    "module": "Preserve",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "moduleDetection": "force",
-    "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
     "noEmit": true,
 
-    "types": ["bun-types"],
+    "types": ["node"],
 
-    // 엄격 모드
     "strict": true,
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
 
-    // 경로 별칭 (@/ -> src/)
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-
-    // Hono JSX (필요 시)
     "jsx": "react-jsx",
     "jsxImportSource": "hono/jsx"
   },
-  "include": ["src/**/*", "drizzle.config.ts"]
+  "include": ["src/**/*", "api/**/*", "drizzle.config.ts"]
 }

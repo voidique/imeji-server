@@ -10,9 +10,9 @@ import {
   rateLimit,
   securityHeaders,
   session,
-} from '@/middlewares'
-import { registerRoutes } from '@/routes'
-import type { AppBindings } from '@/types'
+} from './middlewares'
+import { registerRoutes } from './routes'
+import type { AppBindings } from './types'
 
 export function createApp() {
   const app = new Hono<AppBindings>()

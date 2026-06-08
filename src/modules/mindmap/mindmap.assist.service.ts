@@ -1,9 +1,9 @@
 import { streamObject } from 'ai'
 import { and, eq } from 'drizzle-orm'
-import { db } from '@/db/client'
-import { mindmap } from '@/db/schema'
-import { defaultModel } from '@/lib/ai'
-import { httpError } from '@/lib/errors'
+import { db } from '../../db/client'
+import { mindmap } from '../../db/schema'
+import { defaultModel } from '../../lib/ai'
+import { httpError } from '../../lib/errors'
 import { buildAssistPrompt, buildAssistSystem } from './mindmap.assist.prompt'
 import { type AssistInput, proposalSchema } from './mindmap.ops.schema'
 

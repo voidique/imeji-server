@@ -1,7 +1,7 @@
 import { and, count, desc, eq } from 'drizzle-orm'
-import { db } from '@/db/client'
-import { type Concept, concept, mindmap } from '@/db/schema'
-import { httpError } from '@/lib/errors'
+import { db } from '../../db/client'
+import { type Concept, concept, mindmap } from '../../db/schema'
+import { httpError } from '../../lib/errors'
 import type { CreateConceptInput, UpdateConceptInput } from './mindmap.schema'
 import { buildTree, toMarkdown } from './mindmap.transform'
 

@@ -1,11 +1,10 @@
-import { createApp } from '@/app'
-import { env } from '@/config/env'
+import 'dotenv/config'
+import { serve } from '@hono/node-server'
+import { createApp } from './app'
+import { env } from './config/env'
 
 const app = createApp()
 
-console.log(`🚀 imeji-server listening on http://localhost:${env.PORT}`)
-
-export default {
-  port: env.PORT,
-  fetch: app.fetch,
-}
+serve({ fetch: app.fetch, port: env.PORT }, (info) => {
+  console.log(`🚀 imeji-server listening on http://localhost:${info.port}`)
+})

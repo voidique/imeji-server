@@ -1,6 +1,6 @@
 import { type ModelMessage, streamText } from 'ai'
-import { defaultModel } from '@/lib/ai'
-import { getMindmapMarkdown } from '@/modules/mindmap/mindmap.service'
+import { defaultModel } from '../../lib/ai'
+import { getMindmapMarkdown } from '../mindmap/mindmap.service'
 import type { ChatRequest } from './chat.schema'
 
 export async function streamMapChat(userId: string, { mapId, messages }: ChatRequest) {

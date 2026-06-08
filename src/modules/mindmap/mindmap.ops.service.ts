@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm'
-import { db } from '@/db/client'
-import { concept, mindmap } from '@/db/schema'
-import { httpError } from '@/lib/errors'
+import { db } from '../../db/client'
+import { concept, mindmap } from '../../db/schema'
+import { httpError } from '../../lib/errors'
 import type { Op } from './mindmap.ops.schema'
 import { buildTree } from './mindmap.transform'
 

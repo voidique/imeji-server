@@ -1,4 +1,4 @@
-import { env } from '@/config/env'
+import { env } from '../../config/env'
 import { openai } from './providers'
 
 export function defaultModel() {
